@@ -69,10 +69,18 @@ export default function GoalPage() {
     return entries;
   }, [goals, todos]);
 
-  if (status === "loading" || !userId) {
+  if (status === "loading") {
     return (
       <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col items-center justify-center gap-4 px-6 py-8">
         <p className="text-sm text-gray-500">불러오는 중...</p>
+      </main>
+    );
+  }
+  if (!userId) {
+    router.replace("/login");
+    return (
+      <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col items-center justify-center gap-4 px-6 py-8">
+        <p className="text-sm text-gray-500">로그인 페이지로 이동 중...</p>
       </main>
     );
   }
