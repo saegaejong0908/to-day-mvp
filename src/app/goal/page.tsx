@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 import CharacterAvatar from "@/components/CharacterAvatar";
@@ -12,6 +13,7 @@ import { useUserCoreCoach } from "@/hooks/useUserCoreCoach";
 import { coreMeta, methodMeta } from "@/lib/charactersMeta";
 
 export default function GoalPage() {
+  const router = useRouter();
   const { data: session, status } = useSession();
   const userId = session?.user?.id ?? session?.user?.email ?? undefined;
   const { goals, activeGoalId, setActiveGoalId, addGoal, updateGoalMethod, initialized: goalsReady } = useGoals(userId);
