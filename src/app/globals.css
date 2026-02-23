@@ -71,7 +71,7 @@ body::before {
   }
 
   .ui-panel {
-    @apply rounded-3xl border border-amber-200/70 bg-white/90 p-4 shadow-[0_8px_24px_rgba(51,34,12,0.08)];
+    @apply rounded-3xl border border-amber-200/70 bg-white/90 p-4 shadow-lg;
   }
 
   .ui-panel-header {
