@@ -26,7 +26,7 @@ export default function CoachDeck({
 }: CoachDeckProps) {
   if (!coreCoach || !methodMode) {
     return (
-      <section className="rounded-2xl border border-dashed border-gray-300 bg-white/80 p-5">
+      <section className="ui-panel border-dashed border-amber-200">
         <h2 className="text-lg font-extrabold text-gray-900">코치 덱</h2>
         <p className="mt-2 text-sm text-gray-600">코어 캐릭터와 목표를 준비하면 코치가 활성화됩니다.</p>
       </section>
@@ -41,7 +41,7 @@ export default function CoachDeck({
     .slice(0, 2);
 
   return (
-    <section className="rounded-2xl border border-amber-200 bg-white/85 p-5 shadow-sm">
+    <section className="ui-panel">
       <h2 className="text-sm font-bold uppercase tracking-[0.14em] text-gray-500">Coach Deck</h2>
 
       <div className="relative mt-4 flex justify-center rounded-2xl border border-amber-100 bg-amber-50/80 p-4">
@@ -63,7 +63,7 @@ export default function CoachDeck({
           <button
             type="button"
             onClick={onUseSkill}
-            className="mt-3 w-full rounded-lg bg-amber-500 px-3 py-2 text-sm font-bold text-white transition hover:bg-amber-600"
+            className="ui-btn-primary mt-3 w-full"
           >
             {skillLabel}
           </button>
@@ -77,7 +77,7 @@ export default function CoachDeck({
               key={suggestion.label}
               type="button"
               onClick={() => onPickSuggestion(suggestion.value)}
-              className="rounded-full border border-amber-300 bg-white px-3 py-1 text-xs font-semibold text-amber-800 transition hover:bg-amber-100"
+              className="ui-btn-chip"
             >
               {suggestion.label}
             </button>

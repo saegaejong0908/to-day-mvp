@@ -24,7 +24,7 @@ export default function StructuredGuideCard({
   const robot = methodMeta.robot;
 
   return (
-    <section className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4 shadow-sm">
+    <section className="rounded-2xl border border-emerald-200 bg-white/70 p-4">
       <div className="mb-2 flex items-center gap-2">
         <CharacterAvatar imageSrc={robot.imageMono} alt={robot.nameKo} size="md" fallbackText={robot.short} />
         <div>
@@ -47,14 +47,14 @@ export default function StructuredGuideCard({
             <button
               type="button"
               onClick={() => onCompleteNext?.(nextTodo.id)}
-              className="rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold text-white"
+              className="ui-btn-primary"
             >
               Next 1 완료
             </button>
             <button
               type="button"
               onClick={() => onFillInput?.(nextTodo.title)}
-              className="rounded-full border border-emerald-300 bg-white px-3 py-1 text-xs font-semibold text-emerald-800"
+              className="ui-btn-chip"
             >
               Next 1로 입력 채우기
             </button>
@@ -65,7 +65,7 @@ export default function StructuredGuideCard({
               value={draftTitle}
               onChange={(event) => setDraftTitle(event.target.value)}
               placeholder="Next 1 제목 입력"
-              className="w-full rounded-lg border border-emerald-200 bg-white px-3 py-2 text-sm outline-none ring-emerald-300 focus:ring"
+              className="ui-input"
             />
             <div className="flex gap-2">
               <button
@@ -77,7 +77,7 @@ export default function StructuredGuideCard({
                   onCreateNext?.(draftTitle.trim());
                   setDraftTitle("");
                 }}
-                className="rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold text-white disabled:opacity-40"
+                className="ui-btn-primary"
                 disabled={!draftTitle.trim()}
               >
                 Next 1 만들기
@@ -85,7 +85,7 @@ export default function StructuredGuideCard({
               <button
                 type="button"
                 onClick={onFocusInput}
-                className="rounded-full border border-emerald-300 bg-white px-3 py-1 text-xs font-semibold text-emerald-800"
+                className="ui-btn-chip"
               >
                 백로그 추가로 이동
               </button>

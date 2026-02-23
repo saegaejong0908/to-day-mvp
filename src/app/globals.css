@@ -9,6 +9,96 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: radial-gradient(circle at top, #fffdf7 0%, #f4efe4 55%, #ece4d4 100%);
+  background:
+    radial-gradient(circle at 12% 6%, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0) 38%),
+    radial-gradient(circle at 88% 10%, rgba(255, 255, 255, 0.52) 0%, rgba(255, 255, 255, 0) 34%),
+    linear-gradient(160deg, #f9f4e8 0%, #f4eddc 48%, #eee4d0 100%);
+  background-attachment: fixed;
   color: #1f2937;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image:
+    radial-gradient(rgba(78, 59, 33, 0.35) 0.6px, transparent 0.6px),
+    radial-gradient(rgba(78, 59, 33, 0.25) 0.5px, transparent 0.5px);
+  background-size: 7px 7px, 11px 11px;
+  background-position: 0 0, 4px 4px;
+}
+
+@layer components {
+  .app-shell {
+    @apply relative min-h-screen px-4 py-4 text-gray-800;
+  }
+
+  .app-shell-bg {
+    @apply pointer-events-none absolute inset-0;
+    background:
+      radial-gradient(circle at 14% 12%, rgba(255, 255, 255, 0.52), transparent 38%),
+      radial-gradient(circle at 88% 82%, rgba(245, 210, 149, 0.15), transparent 42%);
+  }
+
+  .app-shell-content {
+    @apply relative mx-auto w-full max-w-5xl;
+  }
+
+  .hud-bar {
+    @apply sticky top-3 z-30 mb-5 grid grid-cols-1 gap-2 rounded-2xl border border-amber-200/80 bg-white/90 p-3 shadow-sm backdrop-blur lg:grid-cols-[160px_minmax(0,1fr)_190px];
+  }
+
+  .hud-col {
+    @apply min-w-0 rounded-xl border border-amber-100 bg-amber-50/45 px-3 py-2;
+  }
+
+  .hud-col-center {
+    @apply min-w-0;
+  }
+
+  .hud-col-right {
+    @apply flex flex-col items-start lg:items-end;
+  }
+
+  .hud-caption {
+    @apply text-[10px] font-bold uppercase tracking-[0.14em] text-amber-700;
+  }
+
+  .hud-value {
+    @apply text-xs font-bold text-gray-800;
+  }
+
+  .ui-panel {
+    @apply rounded-3xl border border-amber-200/70 bg-white/90 p-4 shadow-[0_8px_24px_rgba(51,34,12,0.08)];
+  }
+
+  .ui-panel-header {
+    @apply mb-3 flex items-center justify-between gap-2;
+  }
+
+  .ui-panel-body {
+    @apply space-y-3;
+  }
+
+  .ui-btn-primary {
+    @apply rounded-xl border border-transparent bg-amber-500 px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-amber-600 disabled:cursor-not-allowed disabled:opacity-45;
+  }
+
+  .ui-btn-secondary {
+    @apply rounded-xl border border-amber-200 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 transition hover:bg-amber-50;
+  }
+
+  .ui-btn-chip {
+    @apply rounded-full border border-amber-300 bg-white px-3 py-1 text-xs font-semibold text-amber-800 transition hover:bg-amber-100;
+  }
+
+  .ui-chip {
+    @apply inline-flex rounded-full border border-amber-200 bg-white px-2 py-0.5 text-[10px] font-bold text-amber-800;
+  }
+
+  .ui-input {
+    @apply w-full rounded-xl border border-amber-200 bg-white px-3 py-2 text-sm outline-none ring-amber-300 focus:ring;
+  }
 }
