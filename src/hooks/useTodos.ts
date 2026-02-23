@@ -122,7 +122,7 @@ export function useTodos(activeGoalId: string | null, userId?: string) {
     [todosByActiveGoal],
   );
 
-  const getNextCandidate = (goalId: string, excludeTodoId?: string): Todo | null => {
+  const getNextCandidate = (goalId: string, excludeTodoId?: string): Todo | undefined => {
     const candidates = todos
       .filter(
         (todo) =>
@@ -133,7 +133,7 @@ export function useTodos(activeGoalId: string | null, userId?: string) {
       )
       .sort((a, b) => a.createdAt - b.createdAt);
 
-    return candidates[0] ?? null;
+    return candidates[0];
   };
 
   return {

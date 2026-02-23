@@ -6,15 +6,15 @@ import CharacterAvatar from "@/components/CharacterAvatar";
 import { methodMeta } from "@/lib/charactersMeta";
 
 type StructuredGuideCardProps = {
-  nextTodoTitle?: string;
+  nextTodo?: { id: string; title: string } | null;
   onCreateNext?: (title: string) => void;
-  onCompleteNext?: () => void;
+  onCompleteNext?: (todoId: string) => void;
   onFillInput?: (value: string) => void;
   onFocusInput?: () => void;
 };
 
 export default function StructuredGuideCard({
-  nextTodoTitle,
+  nextTodo,
   onCreateNext,
   onCompleteNext,
   onFillInput,
@@ -36,24 +36,24 @@ export default function StructuredGuideCard({
       <div className="rounded-xl border border-emerald-200 bg-white p-3">
         <p className="text-xs font-bold uppercase tracking-wide text-emerald-700">Next 1</p>
         <p className="mt-1 text-sm font-semibold text-gray-900">
-          {nextTodoTitle ? nextTodoTitle : "Next 1이 아직 없음"}
+          {nextTodo ? nextTodo.title : "Next 1이 아직 없음"}
         </p>
         <p className="mt-1 text-xs text-gray-600">이것만 하면 돼.</p>
       </div>
 
       <div className="mt-3 flex gap-2">
-        {nextTodoTitle ? (
+        {nextTodo ? (
           <>
             <button
               type="button"
-              onClick={onCompleteNext}
+              onClick={() => onCompleteNext?.(nextTodo.id)}
               className="rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold text-white"
             >
               Next 1 완료
             </button>
             <button
               type="button"
-              onClick={() => onFillInput?.(nextTodoTitle)}
+              onClick={() => onFillInput?.(nextTodo.title)}
               className="rounded-full border border-emerald-300 bg-white px-3 py-1 text-xs font-semibold text-emerald-800"
             >
               Next 1로 입력 채우기

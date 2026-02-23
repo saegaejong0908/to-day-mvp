@@ -99,7 +99,7 @@ export default function TodoPage() {
   };
 
   const handleCreateTodo = () => {
-    if (!activeGoalId || !todoTitle.trim()) {
+    if (!activeGoalId || !activeGoal || !todoTitle.trim()) {
       return;
     }
 
@@ -109,7 +109,10 @@ export default function TodoPage() {
       return;
     }
 
-    addTodo(activeGoalId, normalized);
+    const created = addTodo(activeGoalId, normalized);
+    if (activeGoal.goalType === "structured" && !activeGoal.nextTodoId) {
+      setNextTodoId(activeGoal.id, created.id);
+    }
     setTodoTitle("");
   };
 
@@ -249,7 +252,7 @@ export default function TodoPage() {
 
           {activeGoal?.goalType === "structured" ? (
             <StructuredGuideCard
-              nextTodoTitle={nextStructuredTodo?.title}
+              nextTodo={nextStructuredTodo ? { id: nextStructuredTodo.id, title: nextStructuredTodo.title } : null}
               onCreateNext={(title) => {
                 if (!activeGoalId || !activeGoal) {
                   return;
@@ -262,12 +265,12 @@ export default function TodoPage() {
                 setNextTodoId(activeGoal.id, created.id);
                 setTodoTitle("");
               }}
-              onCompleteNext={() => {
-                if (!activeGoal || !nextStructuredTodo) {
+              onCompleteNext={(todoId) => {
+                if (!activeGoal) {
                   return;
                 }
-                toggleDone(nextStructuredTodo.id);
-                const nextCandidate = getNextCandidate(activeGoal.id, nextStructuredTodo.id);
+                toggleDone(todoId);
+                const nextCandidate = getNextCandidate(activeGoal.id, todoId);
                 setNextTodoId(activeGoal.id, nextCandidate?.id ?? null);
               }}
               onFillInput={(value) => setTodoTitle(value)}
