@@ -36,22 +36,84 @@ body::before {
   }
 
   .app-shell-bg {
-    @apply pointer-events-none absolute inset-0;
-    background:
-      radial-gradient(circle at 14% 12%, rgba(255, 255, 255, 0.52), transparent 38%),
-      radial-gradient(circle at 88% 82%, rgba(245, 210, 149, 0.15), transparent 42%);
+    @apply pointer-events-none absolute inset-0 z-0;
+    background: none;
   }
 
   .app-shell-content {
-    @apply relative mx-auto w-full max-w-5xl;
+    @apply relative z-20 mx-auto w-full max-w-5xl;
+  }
+
+  .scene-root {
+    @apply pointer-events-none fixed inset-0 z-10 flex items-center justify-center overflow-hidden;
+    background: radial-gradient(circle at center, #00000022, #00000055);
+  }
+
+  .scene-side-fill {
+    @apply object-cover object-center scale-110 blur-md opacity-45;
+  }
+
+  .scene-center {
+    @apply relative;
+    width: min(100vw, calc(100vh * 16 / 9));
+    aspect-ratio: 16 / 9;
+  }
+
+  .scene-bg {
+    @apply object-contain object-center;
+  }
+
+  .hotspot {
+    @apply pointer-events-auto absolute rounded-2xl border-none bg-transparent p-0 transition duration-150;
+    filter: brightness(0.94);
+  }
+
+  .hotspot:hover:not(:disabled) {
+    transform: scale(1.03);
+    filter: brightness(1.08);
+    cursor: pointer;
+  }
+
+  .hotspot:disabled {
+    @apply cursor-default;
+  }
+
+  .room-hotspot-active {
+    @apply ring-2 ring-amber-300;
+  }
+
+  .scene-panel-wrap {
+    @apply fixed inset-0 z-50;
+  }
+
+  .scene-panel-overlay {
+    @apply absolute inset-0 bg-black/30;
+  }
+
+  .scene-panel-drawer {
+    @apply absolute bottom-0 left-0 right-0 max-h-[86vh] overflow-y-auto rounded-t-3xl border border-amber-200 bg-[#f8f3e8]/95 p-4 shadow-2xl;
+  }
+
+  @media (min-width: 1024px) {
+    .scene-panel-drawer {
+      @apply bottom-4 left-auto right-4 top-4 w-[min(980px,80vw)] max-h-none rounded-3xl;
+    }
+  }
+
+  .scene-panel-header {
+    @apply sticky top-0 z-10 mb-3 flex items-center justify-between border-b border-amber-200 bg-[#f8f3e8]/95 pb-3;
+  }
+
+  .scene-panel-content {
+    @apply space-y-5;
   }
 
   .hud-bar {
-    @apply sticky top-3 z-30 mb-5 grid grid-cols-1 gap-2 rounded-2xl border border-amber-200/80 bg-white/90 p-3 shadow-sm backdrop-blur lg:grid-cols-[160px_minmax(0,1fr)_190px];
+    @apply sticky top-3 z-30 mb-5 grid grid-cols-1 gap-2 rounded-2xl border border-transparent bg-transparent p-3 shadow-none backdrop-blur-0 lg:grid-cols-[160px_minmax(0,1fr)_190px];
   }
 
   .hud-col {
-    @apply min-w-0 rounded-xl border border-amber-100 bg-amber-50/45 px-3 py-2;
+    @apply min-w-0 rounded-xl border border-transparent bg-transparent px-3 py-2;
   }
 
   .hud-col-center {
@@ -71,7 +133,7 @@ body::before {
   }
 
   .ui-panel {
-    @apply rounded-3xl border border-amber-200/70 bg-white/90 p-4 shadow-lg;
+    @apply rounded-3xl border border-transparent bg-transparent p-4 shadow-none;
   }
 
   .ui-panel-header {

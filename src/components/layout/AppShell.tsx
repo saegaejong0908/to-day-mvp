@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 
 import HUDBar from "@/components/layout/HUDBar";
+import RoomScene from "@/components/scene/RoomScene";
 import type { CoreCoach, GoalType } from "@/types/coach";
 
 type AppShellProps = {
@@ -19,6 +20,7 @@ export default function AppShell({ tab, activeGoal, userCoreCoach, children }: A
   return (
     <main className="app-shell">
       <div className="app-shell-bg" aria-hidden />
+      <RoomScene />
       <div className="app-shell-content">
         <HUDBar tab={tab} activeGoal={activeGoal} userCoreCoach={userCoreCoach} />
         <div className="space-y-5 pb-24">{children}</div>
@@ -26,4 +28,3 @@ export default function AppShell({ tab, activeGoal, userCoreCoach, children }: A
     </main>
   );
 }
-

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 
-import BottomTabBar from "@/components/nav/BottomTabBar";
 import { SessionProvider } from "@/components/providers/SessionProvider";
 import { auth } from "@/auth";
 
@@ -21,8 +20,7 @@ export default async function RootLayout({
     <html lang="ko">
       <body>
         <SessionProvider session={session}>
-          <main className="pb-20">{children}</main>
-          <BottomTabBar />
+          <main>{children}</main>
         </SessionProvider>
       </body>
     </html>
