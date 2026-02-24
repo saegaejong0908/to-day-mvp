@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 type Hotspot = {
@@ -39,8 +39,12 @@ function toStyle(hotspot: Hotspot) {
 export default function RoomScene() {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [isMobile, setIsMobile] = useState(false);
   const [hotspots, setHotspots] = useState<HotspotConfig>(defaultHotspots);
+  const [aspect, setAspect] = useState(16 / 9);
+  const [frameWidth, setFrameWidth] = useState(0);
+  const debugHotspots = searchParams.get("debugHotspots") === "1";
 
   useEffect(() => {
     let alive = true;
@@ -72,37 +76,103 @@ export default function RoomScene() {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  useEffect(() => {
+    let alive = true;
+    const img = new window.Image();
+    img.src = "/scene/room/bg.png";
+    img.onload = () => {
+      if (!alive || !img.naturalWidth || !img.naturalHeight) return;
+      setAspect(img.naturalWidth / img.naturalHeight);
+    };
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const updateFrame = () => {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const width = Math.min(vw, vh * aspect);
+      setFrameWidth(width);
+    };
+    updateFrame();
+    window.addEventListener("resize", updateFrame);
+    return () => window.removeEventListener("resize", updateFrame);
+  }, [aspect]);
+
   const activeGoal = pathname === "/goal";
   const activeTodo = pathname === "/todo";
-  const activeHotspots = useMemo(() => (isMobile ? hotspots.mobile : hotspots.desktop), [hotspots, isMobile]);
+  const activeHotspots = useMemo(() => {
+    if (isMobile) {
+      return hotspots.mobile;
+    }
+    return {
+      dart: { x: 0.68, y: 0.33, w: 0.1, h: 0.18 },
+      memo: { x: 0.79, y: 0.26, w: 0.16, h: 0.3 },
+    };
+  }, [hotspots, isMobile]);
+
+  const frameHeight = frameWidth > 0 ? frameWidth / aspect : 0;
 
   return (
-    <div className="scene-root">
-      <Image src="/scene/room/bg.png" alt="" fill className="scene-side-fill" sizes="100vw" priority />
-
-      <div className="scene-center">
-        <Image src="/scene/room/bg.png" alt="" fill className="scene-bg" sizes="100vw" priority />
-
-        <button
-          type="button"
-          onClick={() => router.push("/goal?panel=open")}
-          className={["hotspot dart", activeGoal ? "room-hotspot-active" : ""].join(" ").trim()}
-          style={toStyle(activeHotspots.dart)}
-          aria-label="목표 탭으로 이동"
+    <>
+      <div className="scene-root">
+        <Image src="/scene/room/bg.png" alt="" fill className="scene-side-fill" sizes="100vw" priority />
+        <div
+          className="scene-center"
+          style={{
+            width: frameWidth ? `${frameWidth}px` : undefined,
+            height: frameHeight ? `${frameHeight}px` : undefined,
+          }}
         >
-          <Image src="/scene/room/dart.png" alt="" fill className="object-contain" sizes="180px" />
-        </button>
-
-        <button
-          type="button"
-          onClick={() => router.push("/todo?panel=open")}
-          className={["hotspot memo", activeTodo ? "room-hotspot-active" : ""].join(" ").trim()}
-          style={toStyle(activeHotspots.memo)}
-          aria-label="투두 탭으로 이동"
-        >
-          <Image src="/scene/room/memo.png" alt="" fill className="object-contain" sizes="180px" />
-        </button>
+          <Image src="/scene/room/bg.png" alt="" fill className="scene-bg" sizes="100vw" priority />
+        </div>
       </div>
-    </div>
+
+      <div className="scene-hit-root">
+        <div
+          className="scene-center"
+          style={{
+            width: frameWidth ? `${frameWidth}px` : undefined,
+            height: frameHeight ? `${frameHeight}px` : undefined,
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => {
+              console.log("dart click");
+              router.push("/goal?panel=open");
+            }}
+            className={["hotspot dart", activeGoal ? "room-hotspot-active" : "", debugHotspots ? "hotspot-debug" : ""].join(" ").trim()}
+            style={toStyle(activeHotspots.dart)}
+            aria-label="목표 탭으로 이동"
+            aria-current={activeGoal ? "page" : undefined}
+          >
+            <Image src="/scene/room/dart.png" alt="" fill className="object-contain pointer-events-none" sizes="180px" />
+            {debugHotspots ? (
+              <span className="pointer-events-none absolute inset-0 border-2 border-dashed border-yellow-400" />
+            ) : null}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              console.log("memo click");
+              router.push("/todo?panel=open");
+            }}
+            className={["hotspot memo", activeTodo ? "room-hotspot-active" : "", debugHotspots ? "hotspot-debug" : ""].join(" ").trim()}
+            style={toStyle(activeHotspots.memo)}
+            aria-label="투두 탭으로 이동"
+            aria-current={activeTodo ? "page" : undefined}
+          >
+            <Image src="/scene/room/memo.png" alt="" fill className="object-contain pointer-events-none" sizes="220px" />
+            {debugHotspots ? (
+              <span className="pointer-events-none absolute inset-0 border-2 border-dashed border-yellow-400" />
+            ) : null}
+          </button>
+        </div>
+      </div>
+    </>
   );
 }

@@ -54,17 +54,23 @@ body::before {
   }
 
   .scene-center {
-    @apply relative;
+    @apply pointer-events-none relative;
     width: min(100vw, calc(100vh * 16 / 9));
     aspect-ratio: 16 / 9;
   }
 
+  .scene-hit-root {
+    @apply pointer-events-none fixed inset-0 z-40 flex items-center justify-center overflow-hidden;
+  }
+
   .scene-bg {
     @apply object-contain object-center;
+    pointer-events: none;
+    z-index: 0;
   }
 
   .hotspot {
-    @apply pointer-events-auto absolute rounded-2xl border-none bg-transparent p-0 transition duration-150;
+    @apply pointer-events-auto absolute z-10 rounded-2xl border-none bg-transparent p-0 transition duration-150;
     filter: brightness(0.94);
   }
 
@@ -76,6 +82,10 @@ body::before {
 
   .hotspot:disabled {
     @apply cursor-default;
+  }
+
+  .hotspot-debug {
+    @apply outline outline-2 outline-yellow-400;
   }
 
   .room-hotspot-active {
