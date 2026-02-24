@@ -18,12 +18,12 @@ type HotspotConfig = {
 
 const defaultHotspots: HotspotConfig = {
   desktop: {
-    dart: { x: 0.08, y: 0.16, w: 0.12, h: 0.2 },
-    memo: { x: 0.82, y: 0.14, w: 0.13, h: 0.2 },
+    dart: { x: 0.804, y: 0.334, w: 0.105, h: 0.185 },
+    memo: { x: 0.831, y: 0.255, w: 0.205, h: 0.315 },
   },
   mobile: {
-    dart: { x: 0.06, y: 0.08, w: 0.18, h: 0.16 },
-    memo: { x: 0.76, y: 0.08, w: 0.18, h: 0.16 },
+    dart: { x: 0.64, y: 0.33, w: 0.13, h: 0.19 },
+    memo: { x: 0.74, y: 0.25, w: 0.23, h: 0.33 },
   },
 };
 
@@ -107,10 +107,7 @@ export default function RoomScene() {
     if (isMobile) {
       return hotspots.mobile;
     }
-    return {
-      dart: { x: 0.68, y: 0.33, w: 0.1, h: 0.18 },
-      memo: { x: 0.79, y: 0.26, w: 0.16, h: 0.3 },
-    };
+    return hotspots.desktop;
   }, [hotspots, isMobile]);
 
   const frameHeight = frameWidth > 0 ? frameWidth / aspect : 0;
