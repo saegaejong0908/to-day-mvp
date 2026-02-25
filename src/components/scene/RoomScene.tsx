@@ -130,6 +130,20 @@ export default function RoomScene() {
       <div className="scene-hit-root">
         <div
           className="scene-center"
+          onClick={(e) => {
+            const params = new URLSearchParams(window.location.search);
+            const debug = params.get("debugHotspots") === "1";
+            if (!debug) return;
+
+            const rect = e.currentTarget.getBoundingClientRect();
+            const nx = (e.clientX - rect.left) / rect.width;
+            const ny = (e.clientY - rect.top) / rect.height;
+
+            console.log("좌표:", {
+              x: Number(nx.toFixed(3)),
+              y: Number(ny.toFixed(3)),
+            });
+          }}
           style={{
             width: frameWidth ? `${frameWidth}px` : undefined,
             height: frameHeight ? `${frameHeight}px` : undefined,
@@ -142,7 +156,7 @@ export default function RoomScene() {
               router.push("/goal?panel=open");
             }}
             className={["hotspot dart", activeGoal ? "room-hotspot-active" : "", debugHotspots ? "hotspot-debug" : ""].join(" ").trim()}
-            style={toStyle(activeHotspots.dart)}
+            style={{ ...toStyle(activeHotspots.dart), pointerEvents: "none" }}
             aria-label="목표 탭으로 이동"
             aria-current={activeGoal ? "page" : undefined}
           >
@@ -159,7 +173,7 @@ export default function RoomScene() {
               router.push("/todo?panel=open");
             }}
             className={["hotspot memo", activeTodo ? "room-hotspot-active" : "", debugHotspots ? "hotspot-debug" : ""].join(" ").trim()}
-            style={toStyle(activeHotspots.memo)}
+            style={{ ...toStyle(activeHotspots.memo), pointerEvents: "none" }}
             aria-label="투두 탭으로 이동"
             aria-current={activeTodo ? "page" : undefined}
           >
