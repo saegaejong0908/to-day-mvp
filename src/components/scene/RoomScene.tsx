@@ -44,6 +44,7 @@ export default function RoomScene() {
   const [hotspots, setHotspots] = useState<HotspotConfig>(defaultHotspots);
   const [aspect, setAspect] = useState(16 / 9);
   const [frameWidth, setFrameWidth] = useState(0);
+  const [isScenePanelOpen, setIsScenePanelOpen] = useState(false);
   const debugHotspots = searchParams.get("debugHotspots") === "1";
 
   useEffect(() => {
@@ -101,6 +102,18 @@ export default function RoomScene() {
     return () => window.removeEventListener("resize", updateFrame);
   }, [aspect]);
 
+  useEffect(() => {
+    const updatePanelState = () => {
+      setIsScenePanelOpen(document.body.classList.contains("scene-panel-open"));
+    };
+
+    updatePanelState();
+    const observer = new MutationObserver(updatePanelState);
+    observer.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+
+    return () => observer.disconnect();
+  }, []);
+
   const activeGoal = pathname === "/goal";
   const activeTodo = pathname === "/todo";
   const activeHotspots = useMemo(() => {
@@ -127,63 +140,65 @@ export default function RoomScene() {
         </div>
       </div>
 
-      <div className="scene-hit-root">
-        <div
-          className="scene-center"
-          onClick={(e) => {
-            const params = new URLSearchParams(window.location.search);
-            const debug = params.get("debugHotspots") === "1";
-            if (!debug) return;
+      {!isScenePanelOpen ? (
+        <div className="scene-hit-root">
+          <div
+            className="scene-center"
+            onClick={(e) => {
+              const params = new URLSearchParams(window.location.search);
+              const debug = params.get("debugHotspots") === "1";
+              if (!debug) return;
 
-            const rect = e.currentTarget.getBoundingClientRect();
-            const nx = (e.clientX - rect.left) / rect.width;
-            const ny = (e.clientY - rect.top) / rect.height;
+              const rect = e.currentTarget.getBoundingClientRect();
+              const nx = (e.clientX - rect.left) / rect.width;
+              const ny = (e.clientY - rect.top) / rect.height;
 
-            console.log("좌표:", {
-              x: Number(nx.toFixed(3)),
-              y: Number(ny.toFixed(3)),
-            });
-          }}
-          style={{
-            width: frameWidth ? `${frameWidth}px` : undefined,
-            height: frameHeight ? `${frameHeight}px` : undefined,
-          }}
-        >
-          <button
-            type="button"
-            onClick={() => {
-              console.log("dart click");
-              router.push("/goal?panel=open");
+              console.log("좌표:", {
+                x: Number(nx.toFixed(3)),
+                y: Number(ny.toFixed(3)),
+              });
             }}
-            className={["hotspot dart", activeGoal ? "room-hotspot-active" : "", debugHotspots ? "hotspot-debug" : ""].join(" ").trim()}
-            style={{ ...toStyle(activeHotspots.dart), pointerEvents: "none" }}
-            aria-label="목표 탭으로 이동"
-            aria-current={activeGoal ? "page" : undefined}
-          >
-            <Image src="/scene/room/dart.png" alt="" fill className="object-contain pointer-events-none" sizes="180px" />
-            {debugHotspots ? (
-              <span className="pointer-events-none absolute inset-0 border-2 border-dashed border-yellow-400" />
-            ) : null}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              console.log("memo click");
-              router.push("/todo?panel=open");
+            style={{
+              width: frameWidth ? `${frameWidth}px` : undefined,
+              height: frameHeight ? `${frameHeight}px` : undefined,
             }}
-            className={["hotspot memo", activeTodo ? "room-hotspot-active" : "", debugHotspots ? "hotspot-debug" : ""].join(" ").trim()}
-            style={{ ...toStyle(activeHotspots.memo), pointerEvents: "none" }}
-            aria-label="투두 탭으로 이동"
-            aria-current={activeTodo ? "page" : undefined}
           >
-            <Image src="/scene/room/memo.png" alt="" fill className="object-contain pointer-events-none" sizes="220px" />
-            {debugHotspots ? (
-              <span className="pointer-events-none absolute inset-0 border-2 border-dashed border-yellow-400" />
-            ) : null}
-          </button>
+            <button
+              type="button"
+              onClick={() => {
+                console.log("dart click");
+                router.push("/goal?panel=open");
+              }}
+              className={["hotspot dart", activeGoal ? "room-hotspot-active" : "", debugHotspots ? "hotspot-debug" : ""].join(" ").trim()}
+              style={toStyle(activeHotspots.dart)}
+              aria-label="목표 탭으로 이동"
+              aria-current={activeGoal ? "page" : undefined}
+            >
+              <Image src="/scene/room/dart.png" alt="" fill className="object-contain pointer-events-none" sizes="180px" />
+              {debugHotspots ? (
+                <span className="pointer-events-none absolute inset-0 border-2 border-dashed border-yellow-400" />
+              ) : null}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                console.log("memo click");
+                router.push("/todo?panel=open");
+              }}
+              className={["hotspot memo", activeTodo ? "room-hotspot-active" : "", debugHotspots ? "hotspot-debug" : ""].join(" ").trim()}
+              style={toStyle(activeHotspots.memo)}
+              aria-label="투두 탭으로 이동"
+              aria-current={activeTodo ? "page" : undefined}
+            >
+              <Image src="/scene/room/memo.png" alt="" fill className="object-contain pointer-events-none" sizes="220px" />
+              {debugHotspots ? (
+                <span className="pointer-events-none absolute inset-0 border-2 border-dashed border-yellow-400" />
+              ) : null}
+            </button>
+          </div>
         </div>
-      </div>
+      ) : null}
     </>
   );
 }

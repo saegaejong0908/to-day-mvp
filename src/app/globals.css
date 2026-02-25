@@ -89,7 +89,7 @@ body::before {
   }
 
   .room-hotspot-active {
-    @apply ring-2 ring-amber-300;
+    @apply ring-0;
   }
 
   .scene-panel-wrap {

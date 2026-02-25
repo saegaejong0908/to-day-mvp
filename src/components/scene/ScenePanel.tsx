@@ -23,10 +23,12 @@ export default function ScenePanel({ open, title, onClose, children }: ScenePane
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    document.body.classList.add("scene-panel-open");
     window.addEventListener("keydown", onKeyDown);
 
     return () => {
       document.body.style.overflow = originalOverflow;
+      document.body.classList.remove("scene-panel-open");
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [open, onClose]);
@@ -50,4 +52,3 @@ export default function ScenePanel({ open, title, onClose, children }: ScenePane
     </div>
   );
 }
-
